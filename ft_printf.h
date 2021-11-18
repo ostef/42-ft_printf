@@ -6,7 +6,7 @@
 /*   By: soumanso <soumanso@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:50:38 by soumanso          #+#    #+#             */
-/*   Updated: 2021/11/18 12:17:26 by soumanso         ###   ########lyon.fr   */
+/*   Updated: 2021/11/18 12:56:48 by soumanso         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ typedef struct s_fmt_arg
 
 t_int	ft_putchars_buff(t_buff *buff, char c, t_s64 len, t_bool escaped);
 t_int	ft_putchar_buff(t_buff *buff, char c, t_bool escaped);
-t_int	ft_putstr_buff(t_buff *buff, const char *str, t_bool escaped);
-t_int	ft_putstrn_buff(t_buff *buff, const char *str, t_s64 len, t_bool escaped);
+t_int	ft_putstr_buff(t_buff *buff, char *str, t_bool escaped);
+t_int	ft_putstrn_buff(t_buff *buff, char *str, t_s64 len, t_bool escaped);
 t_int	ft_putuint_buff(t_buff *buff, t_u64 n, t_int min, const char *base);
 
 t_int	ft_read_arg(const char *fmt, t_fmt_arg *arg, va_list args);
