@@ -1,18 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_sprintf_p.c                                     :+:      :+:    :+:   */
+/*   clamp.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: soumanso <soumanso@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/03 22:39:50 by soumanso          #+#    #+#             */
-/*   Updated: 2021/11/22 19:07:35 by soumanso         ###   ########lyon.fr   */
+/*   Created: 2021/11/22 16:39:40 by soumanso          #+#    #+#             */
+/*   Updated: 2021/11/22 16:40:35 by soumanso         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-t_int	ft_sprintf_p(t_buff *buff, t_fmt_arg arg)
+t_s64	ft_clamp(t_s64 x, t_s64 min, t_s64 max)
 {
-	return (ft_putuint_buff (buff, (t_u64)arg.p, arg.precision, HEX));
+	if (x > max)
+		x = max;
+	if (x < min)
+		x = min;
+	return (x);
+}
+
+t_f32	ft_clampf(t_f32 x, t_f32 min, t_f32 max)
+{
+	if (x > max)
+		x = max;
+	if (x < min)
+		x = min;
+	return (x);
 }

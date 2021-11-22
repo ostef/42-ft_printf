@@ -6,7 +6,7 @@
 /*   By: soumanso <soumanso@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 12:27:46 by soumanso          #+#    #+#             */
-/*   Updated: 2021/11/12 20:02:57 by soumanso         ###   ########lyon.fr   */
+/*   Updated: 2021/11/22 19:26:06 by soumanso         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LIBFT_H
 
 # include <stdarg.h>
+# include <stdlib.h>
 
 typedef char			t_s8;
 typedef unsigned char	t_u8;
@@ -27,8 +28,8 @@ typedef int				t_int;
 typedef unsigned int	t_uint;
 typedef float			t_f32;
 typedef double			t_f64;
-typedef t_u8			*t_str;
-typedef const t_u8		*t_cstr;
+typedef char			*t_str;
+typedef const char		*t_cstr;
 typedef int				t_file;
 typedef t_u8			t_bool;
 enum
@@ -37,12 +38,8 @@ enum
 	TRUE = 1
 };
 
-# ifndef NULL
-#  define NULL (void *)0
-# endif
-
 # ifndef STDIN
-#  define STDIN  0
+#  define STDIN 0
 # endif
 
 # ifndef STDOUT
@@ -117,19 +114,31 @@ t_s64		ft_max(t_s64 a, t_s64 b);
 t_f32		ft_maxf(t_f32 a, t_f32 b);
 t_s64		ft_clamp(t_s64 x, t_s64 min, t_s64 max);
 t_f32		ft_clampf(t_f32 x, t_f32 min, t_f32 max);
-t_f32		ft_is_nan(t_f32 x);
-t_f32		ft_is_inf(t_f32 x);
+t_f32		ft_floor(t_f32 x);
+t_f32		ft_round(t_f32 x);
+t_f32		ft_ceil(t_f32 x);
+t_bool		ft_is_nan(t_f32 x);
+t_bool		ft_is_inf(t_f32 x);
+t_bool		ft_is_pos_inf(t_f32 x);
+t_bool		ft_is_neg_inf(t_f32 x);
 
 /* Char */
 
-t_u8		ft_to_lower(t_u8 c);
-t_u8		ft_to_upper(t_u8 c);
-t_bool		ft_is_alpha(t_u8 c);
-t_bool		ft_is_digit(t_u8 c);
-t_bool		ft_is_alnum(t_u8 c);
-t_bool		ft_is_upper(t_u8 c);
-t_bool		ft_is_lower(t_u8 c);
-t_bool		ft_is_space(t_u8 c);
+# define BINARY "01"
+# define OCTAL "0123456789"
+# define DECIMAL "0123456789"
+# define HEXADECIMAL "0123456789abcdef"
+# define HEXADECIMAL_UPPER "0123456789ABCDEF"
+
+char		ft_to_lower(char c);
+char		ft_to_upper(char c);
+t_bool		ft_is_lower(char c);
+t_bool		ft_is_upper(char c);
+t_bool		ft_is_alpha(char c);
+t_bool		ft_is_digit(char c);
+t_bool		ft_is_digit_of_base(char c, t_cstr base);
+t_bool		ft_is_alnum(char c);
+t_bool		ft_is_space(char c);
 
 /* String */
 
@@ -142,10 +151,10 @@ t_str		ft_strcpy(t_str dst, t_cstr src);
 t_str		ft_strncpy(t_str dst, t_cstr src, t_s64 n);
 t_str		ft_strdup(t_cstr s, t_alloc allocator);
 t_str		ft_strndup(t_cstr s, t_s64 n, t_alloc allocator);
-t_cstr		ft_strchr(t_cstr s, t_u8 c);
-t_cstr		ft_strnchr(t_cstr s, t_u8 c, t_s64 n);
-t_cstr		ft_strrchr(t_cstr s, t_u8 c);
-t_cstr		ft_strnrchr(t_cstr s, t_u8 c, t_s64 n);
+t_cstr		ft_strchr(t_cstr s, char c);
+t_cstr		ft_strnchr(t_cstr s, char c, t_s64 n);
+t_cstr		ft_strrchr(t_cstr s, char c);
+t_cstr		ft_strnrchr(t_cstr s, char c, t_s64 n);
 t_cstr		ft_strstr(t_cstr s, t_cstr needle);
 t_cstr		ft_strnstr(t_cstr s, t_cstr needle, t_s64 n);
 t_cstr		ft_strrstr(t_cstr s, t_cstr needle);
@@ -153,7 +162,7 @@ t_cstr		ft_strnrstr(t_cstr s, t_cstr needle, t_s64 n);
 
 /* String convert */
 
-/* Convert a string to an integral/boolean/floating point type.
+/* Convert a string to an integer/boolean type.
  * `s`:		string to convert,
  * `out`:	output value.
  * Return value:
@@ -164,16 +173,14 @@ t_s64		ft_str_to_int(t_cstr s, t_int *out);
 t_s64		ft_str_to_u64(t_cstr s, t_u64 *out);
 t_s64		ft_str_to_uint(t_cstr s, t_uint *out);
 t_s64		ft_str_to_bool(t_cstr s, t_bool *out);
-t_s64		ft_str_to_f64(t_cstr *s, t_f64 *out);
-t_s64		ft_str_to_f32(t_cstr *s, t_f32 *out);
 
 /* Output */
 
-t_s64		ft_fputchar(t_file f, t_u8 c);
+t_s64		ft_fputchar(t_file f, char c);
 t_s64		ft_fputstr(t_file f, t_cstr s);
 t_s64		ft_fputstrn(t_file f, t_cstr s, t_s64 n);
 t_s64		ft_fputnbr(t_file f, t_s64 n);
-t_s64		ft_putchar(t_u8 c);
+t_s64		ft_putchar(char c);
 t_s64		ft_putstr(t_cstr s);
 t_s64		ft_putstrn(t_cstr s, t_s64 n);
 t_s64		ft_putnbr(t_s64 n);

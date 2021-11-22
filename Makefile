@@ -10,20 +10,18 @@ SRC_FILES = source/ft_printf.c\
 	source/specifiers/ft_sprintf_u.c\
 	source/specifiers/ft_sprintf_x.c
 OBJ_FILES = $(SRC_FILES:.c=.o)
-C_FLAGS = -Wall -Wextra -Werror
 CC = gcc
+C_FLAGS = -Wall -Wextra -Werror -I.
 
 all: $(NAME)
 
 %.o: %.c ft_printf.h
-	$(CC) -c $(C_FLAGS) -I. $< -o $@
+	$(CC) -c $(C_FLAGS) $< -o $@
 
 $(NAME): $(OBJ_FILES)
-	make -C libft bonus
+	make -C libft
 	cp libft/libft.a $(NAME)
 	ar rcs $(NAME) $(OBJ_FILES)
-
-bonus: $(NAME)
 
 norme:
 	make -C libft norme
@@ -46,4 +44,4 @@ fclean: clean
 re: fclean all
 	make -C libft re
 
-.PHONY: all bonus norme clean fclean re
+.PHONY: all norme clean fclean re

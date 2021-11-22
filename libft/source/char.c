@@ -1,41 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strcpy.c                                           :+:      :+:    :+:   */
+/*   char.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: soumanso <soumanso@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/22 16:28:30 by soumanso          #+#    #+#             */
-/*   Updated: 2021/11/22 16:28:31 by soumanso         ###   ########lyon.fr   */
+/*   Created: 2021/11/22 17:22:15 by soumanso          #+#    #+#             */
+/*   Updated: 2021/11/22 17:28:58 by soumanso         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_str	ft_strcpy(t_str dst, t_cstr src)
+t_bool	ft_is_alpha(char c)
 {
-	t_s64	i;
-
-	i = 0;
-	while (src[i])
-	{
-		dst[i] = src[i];
-		i += 1;
-	}
-	dst[i] = 0;
-	return (dst);
+	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
 }
 
-t_str	ft_strncpy(t_str dst, t_cstr src, t_s64 n)
+t_bool	ft_is_digit(char c)
 {
-	t_s64	i;
+	return (c >= '0' && c <= '0');
+}
 
-	i = 0;
-	while (i < n && src[i])
-	{
-		dst[i] = src[i];
-		i += 1;
-	}
-	dst[i] = 0;
-	return (dst);
+t_bool	ft_is_digit_of_base(char c, t_cstr base)
+{
+	return (c != 0 && ft_strchr (base, c) != NULL);
+}
+
+t_bool	ft_is_alnum(char c)
+{
+	return (ft_is_alpha (c) || ft_is_digit (c) || c == '_');
+}
+
+t_bool	ft_is_space(char c)
+{
+	return ((c >= 9 && c <= 13) || c == ' ');
 }

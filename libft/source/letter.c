@@ -1,18 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_sprintf_p.c                                     :+:      :+:    :+:   */
+/*   letter.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: soumanso <soumanso@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/03 22:39:50 by soumanso          #+#    #+#             */
-/*   Updated: 2021/11/22 19:07:35 by soumanso         ###   ########lyon.fr   */
+/*   Created: 2021/11/22 17:20:38 by soumanso          #+#    #+#             */
+/*   Updated: 2021/11/22 17:21:59 by soumanso         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-t_int	ft_sprintf_p(t_buff *buff, t_fmt_arg arg)
+char	ft_to_lower(char c)
 {
-	return (ft_putuint_buff (buff, (t_u64)arg.p, arg.precision, HEX));
+	if (ft_is_upper (c))
+		return ('a' + c - 'A');
+	return (c);
+}
+
+char	ft_to_upper(char c)
+{
+	if (ft_is_lower (c))
+		return ('a' + c - 'A');
+	return (c);
+}
+
+t_bool	ft_is_lower(char c)
+{
+	return (c >= 'a' && c <= 'z');
+}
+
+t_bool	ft_is_upper(char c)
+{
+	return (c >= 'A' && c <= 'Z');
 }

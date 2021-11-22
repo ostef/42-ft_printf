@@ -1,18 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_sprintf_p.c                                     :+:      :+:    :+:   */
+/*   sign.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: soumanso <soumanso@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/03 22:39:50 by soumanso          #+#    #+#             */
-/*   Updated: 2021/11/22 19:07:35 by soumanso         ###   ########lyon.fr   */
+/*   Created: 2021/11/22 16:29:36 by soumanso          #+#    #+#             */
+/*   Updated: 2021/11/22 16:30:38 by soumanso         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-t_int	ft_sprintf_p(t_buff *buff, t_fmt_arg arg)
+t_s64	ft_abs(t_s64 x)
 {
-	return (ft_putuint_buff (buff, (t_u64)arg.p, arg.precision, HEX));
+	if (x < 0)
+		return (-x);
+	return (x);
+}
+
+t_f32	ft_absf(t_f32 x)
+{
+	if (x < 0)
+		return (-x);
+	return (x);
+}
+
+t_s64	ft_sign(t_s64 x)
+{
+	if (x < 0)
+		return (-1);
+	if (x > 0)
+		return (1);
+	return (0);
+}
+
+t_f32	ft_signf(t_f32 x)
+{
+	if (x < 0)
+		return (-1);
+	if (x > 0)
+		return (1);
+	return (0);
 }
