@@ -13,7 +13,7 @@
 #ifndef LIBFT_H
 # define LIBFT_H
 
-# include <stdlib.h>
+# include <stdarg.h>
 
 typedef char			t_s8;
 typedef unsigned char	t_u8;
@@ -27,68 +27,170 @@ typedef int				t_int;
 typedef unsigned int	t_uint;
 typedef float			t_f32;
 typedef double			t_f64;
-
-typedef enum e_bool
+typedef t_u8			*t_str;
+typedef const t_u8		*t_cstr;
+typedef int				t_file;
+typedef t_u8			t_bool;
+enum
 {
 	FALSE = 0,
 	TRUE = 1
-}	t_bool;
+};
 
-int			ft_isalpha(int c);
-int			ft_isdigit(int c);
-int			ft_isalnum(int c);
-int			ft_isascii(int c);
-int			ft_isprint(int c);
-size_t		ft_strlen(const char *str);
-void		*ft_memset(void *ptr, int val, size_t n);
-void		ft_bzero(void *ptr, size_t n);
-void		*ft_memcpy(void *dst, const void *src, size_t n);
-void		*ft_memmove(void *dst, const void *src, size_t n);
-size_t		ft_strlcpy(char *dst, const char *src, size_t size);
-size_t		ft_strlcat(char *dst, const char *src, size_t size);
-int			ft_toupper(int c);
-int			ft_tolower(int c);
-char		*ft_strchr(const char *str, int c);
-char		*ft_strrchr(const char *str, int c);
-int			ft_strncmp(const char *s1, const char *s2, size_t n);
-void		*ft_memchr(const void *ptr, int val, size_t n);
-int			ft_memcmp(const void *p1, const void *p2, size_t n);
-const char	*ft_strnstr(const char *s1, const char *s2, size_t n);
-int			ft_atoi(const char *str);
-void		*ft_calloc(size_t num, size_t size);
-char		*ft_strdup(const char *s);
+# ifndef NULL
+#  define NULL (void *)0
+# endif
 
-char		*ft_substr(const char *s, unsigned int start, size_t len);
-char		*ft_strjoin(const char *s1, const char *s2);
-char		*ft_strtrim(const char *s1, const char *set);
-char		**ft_split(const char *s, char c);
-char		*ft_itoa(int n);
-char		*ft_strmapi(const char *s, char (*f)(unsigned int, char));
-void		ft_striteri(char *s, void (*f)(unsigned int, char *));
-void		ft_putchar_fd(char c, int fd);
-void		ft_putstr_fd(const char *s, int fd);
-void		ft_putendl_fd(const char *s, int fd);
-void		ft_putnbr_fd(int n, int fd);
+# ifndef STDIN
+#  define STDIN  0
+# endif
 
-int			ft_strcmp(const char *s1, const char *s2);
-t_bool		ft_strequ(const char *s1, const char *s2);
-t_bool		ft_strnequ(const char *s1, const char *s2, t_s64 len);
-t_int		ft_abs(t_int x);
+# ifndef STDOUT
+#  define STDOUT 1
+# endif
 
-typedef struct s_list
+# ifndef STDERR
+#  define STDERR 2
+# endif
+
+/* Debugging */
+
+void		ft_debug_break(void);
+void		ft_assert(t_bool assert, t_cstr fmt, ...);
+void		ft_panic(t_cstr fmt, ...);
+
+/* Memory allocation */
+
+# ifndef TEMP_STORAGE_SIZE
+#  define TEMP_STORAGE_SIZE (1048576)	/* 1 MB */
+# endif
+
+typedef struct s_temp_storage
 {
-	void			*content;
-	struct s_list	*next;
-}	t_list;
+	t_s64	top;
+	t_u8	mem[TEMP_STORAGE_SIZE];
+}	t_temp_storage;
 
-t_list		*ft_lstnew(void *content);
-void		ft_lstadd_front(t_list **alst, t_list *new);
-int			ft_lstsize(t_list *lst);
-t_list		*ft_lstlast(t_list *lst);
-void		ft_lstadd_back(t_list **alst, t_list *new);
-void		ft_lstdelone(t_list *lst, void (*del)(void *));
-void		ft_lstclear(t_list **lst, void (*del)(void *));
-void		ft_lstiter(t_list *lst, void (*f)(void *));
-t_list		*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+typedef enum e_alloc
+{
+	ALLOC_TEMP = 0,
+	ALLOC_HEAP = 1
+}	t_alloc;
+
+void		ft_reset_temp_storage(void);
+void		*ft_alloc(t_s64 size, t_alloc allocator);
+void		*ft_zalloc(t_s64 size, t_alloc allocator);
+void		ft_free(void *ptr, t_alloc allocator);
+
+/* Memory */
+
+void		*ft_memcpy(void *dst, const void *src, t_s64 n);
+void		*ft_memmove(void *dst, const void *src, t_s64 n);
+void		*ft_memset(void *dst, t_u8 c, t_s64 n);
+t_int		ft_memcmp(const void *p1, const void *p2, t_s64 n);
+t_bool		ft_memequ(const void *p1, const void *p2, t_s64 n);
+const void	*ft_memchr(const void *p, t_u8 c, t_s64 n);
+const void	*ft_memrchr(const void *p, t_u8 c, t_s64 n);
+
+/* Math */
+
+# define S8_MIN  0x80
+# define S8_MAX  0x7f
+# define U8_MAX  0xff
+# define S16_MIN 0x8000
+# define S16_MAX 0x7fff
+# define U16_MAX 0xffff
+# define S32_MIN 0x80000000
+# define S32_MAX 0x7fffffff
+# define U32_MAX 0xffffffff
+# define S64_MIN 0x8000000000000000
+# define S64_MAX 0x7fffffffffffffff
+# define U64_MAX 0xffffffffffffffff
+
+t_s64		ft_abs(t_s64 x);
+t_f32		ft_absf(t_f32 x);
+t_s64		ft_sign(t_s64 x);
+t_f32		ft_signf(t_f32 x);
+t_s64		ft_min(t_s64 a, t_s64 b);
+t_f32		ft_minf(t_f32 a, t_f32 b);
+t_s64		ft_max(t_s64 a, t_s64 b);
+t_f32		ft_maxf(t_f32 a, t_f32 b);
+t_s64		ft_clamp(t_s64 x, t_s64 min, t_s64 max);
+t_f32		ft_clampf(t_f32 x, t_f32 min, t_f32 max);
+t_f32		ft_is_nan(t_f32 x);
+t_f32		ft_is_inf(t_f32 x);
+
+/* Char */
+
+t_u8		ft_to_lower(t_u8 c);
+t_u8		ft_to_upper(t_u8 c);
+t_bool		ft_is_alpha(t_u8 c);
+t_bool		ft_is_digit(t_u8 c);
+t_bool		ft_is_alnum(t_u8 c);
+t_bool		ft_is_upper(t_u8 c);
+t_bool		ft_is_lower(t_u8 c);
+t_bool		ft_is_space(t_u8 c);
+
+/* String */
+
+t_s64		ft_strlen(t_cstr s);
+t_int		ft_strcmp(t_cstr s1, t_cstr s2);
+t_int		ft_strncmp(t_cstr s1, t_cstr s2, t_s64 n);
+t_bool		ft_strequ(t_cstr s1, t_cstr s2);
+t_bool		ft_strnequ(t_cstr s1, t_cstr s2, t_s64 n);
+t_str		ft_strcpy(t_str dst, t_cstr src);
+t_str		ft_strncpy(t_str dst, t_cstr src, t_s64 n);
+t_str		ft_strdup(t_cstr s, t_alloc allocator);
+t_str		ft_strndup(t_cstr s, t_s64 n, t_alloc allocator);
+t_cstr		ft_strchr(t_cstr s, t_u8 c);
+t_cstr		ft_strnchr(t_cstr s, t_u8 c, t_s64 n);
+t_cstr		ft_strrchr(t_cstr s, t_u8 c);
+t_cstr		ft_strnrchr(t_cstr s, t_u8 c, t_s64 n);
+t_cstr		ft_strstr(t_cstr s, t_cstr needle);
+t_cstr		ft_strnstr(t_cstr s, t_cstr needle, t_s64 n);
+t_cstr		ft_strrstr(t_cstr s, t_cstr needle);
+t_cstr		ft_strnrstr(t_cstr s, t_cstr needle, t_s64 n);
+
+/* String convert */
+
+/* Convert a string to an integral/boolean/floating point type.
+ * `s`:		string to convert,
+ * `out`:	output value.
+ * Return value:
+ * The number of characters that have been read from `s`.
+ */
+t_s64		ft_str_to_s64(t_cstr s, t_s64 *out);
+t_s64		ft_str_to_int(t_cstr s, t_int *out);
+t_s64		ft_str_to_u64(t_cstr s, t_u64 *out);
+t_s64		ft_str_to_uint(t_cstr s, t_uint *out);
+t_s64		ft_str_to_bool(t_cstr s, t_bool *out);
+t_s64		ft_str_to_f64(t_cstr *s, t_f64 *out);
+t_s64		ft_str_to_f32(t_cstr *s, t_f32 *out);
+
+/* Output */
+
+t_s64		ft_fputchar(t_file f, t_u8 c);
+t_s64		ft_fputstr(t_file f, t_cstr s);
+t_s64		ft_fputstrn(t_file f, t_cstr s, t_s64 n);
+t_s64		ft_fputnbr(t_file f, t_s64 n);
+t_s64		ft_putchar(t_u8 c);
+t_s64		ft_putstr(t_cstr s);
+t_s64		ft_putstrn(t_cstr s, t_s64 n);
+t_s64		ft_putnbr(t_s64 n);
+
+/* String formatting */
+
+t_s64		ft_vsprint(t_str buff, t_cstr fmt, va_list va);
+t_s64		ft_vsprintln(t_str buff, t_cstr fmt, va_list va);
+t_s64		ft_sprint(t_str buff, t_cstr fmt, ...);
+t_s64		ft_sprintln(t_str buff, t_cstr fmt, ...);
+t_s64		ft_vfprint(t_file f, t_cstr fmt, va_list va);
+t_s64		ft_vfprintln(t_file f, t_cstr fmt, va_list va);
+t_s64		ft_fprint(t_file f, t_cstr fmt, ...);
+t_s64		ft_fprintln(t_file f, t_cstr fmt, ...);
+t_s64		ft_vprint(t_cstr fmt, va_list va);
+t_s64		ft_vprintln(t_cstr fmt, va_list va);
+t_s64		ft_print(t_cstr fmt, ...);
+t_s64		ft_println(t_cstr fmt, ...);
 
 #endif
