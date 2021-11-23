@@ -32,8 +32,8 @@ norme:
 	@norminette $(SRC_FILES)
 	@norminette ft_print.h
 
-tests: $(NAME)
-	@$(CC) $(C_FLAGS) tests.c $(NAME) -o tests
+tests: $(NAME) tests.c
+	$(CC) $(C_FLAGS) tests.c $(NAME) -o tests
 	@./tests
 	@rm -f tests
 

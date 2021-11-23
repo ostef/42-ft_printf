@@ -6,7 +6,7 @@
 /*   By: soumanso <soumanso@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 00:36:42 by soumanso          #+#    #+#             */
-/*   Updated: 2021/11/18 12:22:15 by soumanso         ###   ########lyon.fr   */
+/*   Updated: 2021/11/23 13:52:53 by soumanso         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -330,8 +330,7 @@ int	main(void)
 	ft_println ("=== Custom formatting options ===");
 	ft_println ("%\\s", "Hello\tSailor!");
 	ft_println ("%\\c", '\0');
-	ft_println ("%b", 0x12345);
-	ft_println ("%#b", 0x12345);
+	ft_println ("%*b", ft_println ("%#b", 0x12345) - 1, 0x12345);
 	t_int	n;
 	ft_println ("Hello Sailor%n!", &n);
 	ft_println ("Should be 12: %i.", n);

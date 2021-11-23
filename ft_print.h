@@ -6,7 +6,7 @@
 /*   By: soumanso <soumanso@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:50:38 by soumanso          #+#    #+#             */
-/*   Updated: 2021/11/18 12:56:48 by soumanso         ###   ########lyon.fr   */
+/*   Updated: 2021/11/23 13:47:53 by soumanso         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,13 @@ t_s64	ft_putstr_buff(t_buff *buff, t_cstr str, t_bool escaped);
 t_s64	ft_putstrn_buff(t_buff *buff, t_cstr str, t_s64 len, t_bool escaped);
 t_s64	ft_putuint_buff(t_buff *buff, t_u64 n, t_int min, const char *base);
 
+t_s64	ft_next_arg(t_cstr fmt, t_buff *buff, va_list va);
 t_s64	ft_read_arg(t_cstr fmt, t_fmt_arg *arg, va_list va);
 t_s64	ft_read_flag(char c, t_fmt_arg *arg);
 t_s64	ft_read_width(t_cstr fmt, t_fmt_arg *arg);
 t_s64	ft_read_precision(t_cstr fmt, t_fmt_arg *arg);
 t_s64	ft_read_specifier(char c, t_fmt_arg *arg);
 
-t_s64	ft_next_arg(t_cstr fmt, t_buff *buff, va_list va);
 t_s64	ft_sprint_c(t_buff *buff, t_fmt_arg arg, va_list va);
 t_s64	ft_sprint_s(t_buff *buff, t_fmt_arg arg, va_list va);
 t_s64	ft_sprint_p(t_buff *buff, t_fmt_arg arg, va_list va);
