@@ -10,20 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_print.h"
 
-static const char	g_fmt_specifiers[] = "cspdiuxX";
+static const char	g_fmt_specifiers[] = "cspdiuxXbn";
 static t_fmt_func	g_fmt_funcs[] = {
-	&ft_sprintf_c,
-	&ft_sprintf_s,
-	&ft_sprintf_p,
-	&ft_sprintf_i,
-	&ft_sprintf_i,
-	&ft_sprintf_u,
-	&ft_sprintf_x,
-	&ft_sprintf_x
+	&ft_sprint_c,
+	&ft_sprint_s,
+	&ft_sprint_p,
+	&ft_sprint_i,
+	&ft_sprint_i,
+	&ft_sprint_u,
+	&ft_sprint_x,
+	&ft_sprint_x,
+	&ft_sprint_b,
+	&ft_sprint_n
 };
-static const char	g_flag_str[] = "-+ #0e";
+static const char	g_flag_str[] = "-+ #0\\";
 static t_fmt_flags	g_flag_values[] = {
 	FLAG_LJUSTIFY,
 	FLAG_SIGN,
@@ -33,26 +35,27 @@ static t_fmt_flags	g_flag_values[] = {
 	FLAG_ESCAPED
 };
 
-t_int	ft_read_uint(const char *str, t_int *out)
+t_s64	ft_read_arg(t_cstr fmt, t_fmt_arg *arg, va_list va)
 {
-	t_int	un;
-	t_int	i;
+	t_s64	i;
 
 	i = 0;
-	un = 0;
-	while (str[i] && str[i] >= '0' && str[i] <= '9')
-	{
-		un *= 10;
-		un += str[i] - '0';
+	arg->flags = FLAG_NONE;
+	while (fmt[i] && ft_read_flag (fmt[i], arg))
 		i += 1;
-	}
-	*out = un;
+	i += ft_read_width (fmt + i, arg);
+	if (arg->width == WIDTH_ARG)
+		arg->width = va_arg (va, t_int);
+	i += ft_read_precision (fmt + i, arg);
+	if (arg->precision == PREC_ARG)
+		arg->precision = va_arg (va, t_int);
+	i += ft_read_specifier (fmt[i], arg);
 	return (i);
 }
 
-t_int	ft_read_flag(char c, t_fmt_arg *arg)
+t_s64	ft_read_flag(char c, t_fmt_arg *arg)
 {
-	t_s64		i;
+	t_s64	i;
 
 	i = 0;
 	while (i < (t_s64)(sizeof (g_flag_str) - 1))
@@ -67,9 +70,9 @@ t_int	ft_read_flag(char c, t_fmt_arg *arg)
 	return (0);
 }
 
-t_int	ft_read_width(const char *fmt, t_fmt_arg *arg)
+t_s64	ft_read_width(const char *fmt, t_fmt_arg *arg)
 {
-	t_int	i;
+	t_s64	i;
 
 	i = 0;
 	arg->width = WIDTH_DEFAULT;
@@ -79,13 +82,13 @@ t_int	ft_read_width(const char *fmt, t_fmt_arg *arg)
 		i += 1;
 	}
 	else if (fmt[i] >= '0' && fmt[i] <= '9')
-		i += ft_read_uint (fmt + i, &arg->width);
+		i += ft_str_to_int (fmt + i, &arg->width);
 	return (i);
 }
 
-t_int	ft_read_precision(const char *fmt, t_fmt_arg *arg)
+t_s64	ft_read_precision(const char *fmt, t_fmt_arg *arg)
 {
-	t_int	i;
+	t_s64	i;
 
 	i = 0;
 	arg->precision = PREC_DEFAULT;
@@ -98,21 +101,21 @@ t_int	ft_read_precision(const char *fmt, t_fmt_arg *arg)
 			i += 1;
 		}
 		else if (fmt[i] >= '0' && fmt[i] <= '9')
-			i += ft_read_uint (fmt + i, &arg->precision);
+			i += ft_str_to_int (fmt + i, &arg->precision);
 		else
 			arg->precision = 0;
 	}
 	return (i);
 }
 
-t_int	ft_read_specifier(char c, t_fmt_arg *arg)
+t_s64	ft_read_specifier(char c, t_fmt_arg *arg)
 {
-	t_int	i;
+	t_s64	i;
 
 	arg->specifier = 0;
 	arg->func = NULL;
 	i = 0;
-	while (i < (t_int)(sizeof (g_fmt_specifiers) - 1))
+	while (i < (t_s64)(sizeof (g_fmt_specifiers) - 1))
 	{
 		if (g_fmt_specifiers[i] == c)
 		{

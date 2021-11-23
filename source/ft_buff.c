@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_print.h"
 
 static const char	g_chars_to_escape[] = "\t\v\n\r\b\0";
 static const char	g_escaped_chars[] = "tvnrb0";
 
-t_int	ft_putchar_buff(t_buff *buff, char c, t_bool escaped)
+t_s64	ft_putchar_buff(t_buff *buff, char c, t_bool escaped)
 {
 	t_s64	i;
 
@@ -39,7 +39,7 @@ t_int	ft_putchar_buff(t_buff *buff, char c, t_bool escaped)
 	return (1);
 }
 
-t_int	ft_putchars_buff(t_buff *buff, char c, t_s64 len, t_bool escaped)
+t_s64	ft_putchars_buff(t_buff *buff, char c, t_s64 len, t_bool escaped)
 {
 	t_s64	i;
 
@@ -49,9 +49,9 @@ t_int	ft_putchars_buff(t_buff *buff, char c, t_s64 len, t_bool escaped)
 	return ((t_int)len);
 }
 
-t_int	ft_putstr_buff(t_buff *buff, char *str, t_bool escaped)
+t_s64	ft_putstr_buff(t_buff *buff, t_cstr str, t_bool escaped)
 {
-	t_int	i;
+	t_s64	i;
 
 	i = 0;
 	while (*str)
@@ -62,7 +62,7 @@ t_int	ft_putstr_buff(t_buff *buff, char *str, t_bool escaped)
 	return (i);
 }
 
-t_int	ft_putstrn_buff(t_buff *buff, char *str, t_s64 len, t_bool escaped)
+t_s64	ft_putstrn_buff(t_buff *buff, t_cstr str, t_s64 len, t_bool escaped)
 {
 	t_s64	i;
 
@@ -72,14 +72,14 @@ t_int	ft_putstrn_buff(t_buff *buff, char *str, t_s64 len, t_bool escaped)
 	return ((t_int)i);
 }
 
-t_int	ft_putuint_buff(t_buff *buff, t_u64 n, t_int min, const char *base)
+t_s64	ft_putuint_buff(t_buff *buff, t_u64 n, t_int min, t_cstr base)
 {
-	t_int	len;
-	t_int	base_len;
+	t_s64	len;
+	t_s64	base_len;
 	t_u64	temp;
-	t_int	i;
+	t_s64	i;
 
-	base_len = (t_int)ft_strlen (base);
+	base_len = ft_strlen (base);
 	len = 0;
 	temp = n;
 	while (temp != 0 || len < min || (min < 0 && len == 0))

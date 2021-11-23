@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_sprintf_s.c                                     :+:      :+:    :+:   */
+/*   ft_sprint_s.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: soumanso <soumanso@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,20 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_print.h"
 
-t_int	ft_sprintf_s(t_buff *buff, t_fmt_arg arg)
+t_s64	ft_sprint_s(t_buff *buff, t_fmt_arg arg, va_list va)
 {
 	t_bool	escape;
+	t_cstr	s;
 
+	s = va_arg (va, t_cstr);
 	escape = arg.flags & FLAG_ESCAPED;
 	if (arg.precision < 0)
 	{
-		if (!arg.s)
+		if (!s)
 			return (ft_putstr_buff (buff, "(null)", FALSE));
-		return (ft_putstr_buff (buff, arg.s, escape));
+		return (ft_putstr_buff (buff, s, escape));
 	}
-	if (!arg.s)
+	if (!s)
 		return (ft_putstrn_buff (buff, "(null)", arg.precision, FALSE));
-	return (ft_putstrn_buff (buff, arg.s, arg.precision, escape));
+	return (ft_putstrn_buff (buff, s, arg.precision, escape));
 }

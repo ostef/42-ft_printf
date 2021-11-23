@@ -19,7 +19,7 @@ t_bool	ft_is_alpha(char c)
 
 t_bool	ft_is_digit(char c)
 {
-	return (c >= '0' && c <= '0');
+	return (c >= '0' && c <= '9');
 }
 
 t_bool	ft_is_digit_of_base(char c, t_cstr base)

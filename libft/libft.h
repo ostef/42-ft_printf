@@ -127,8 +127,8 @@ t_bool		ft_is_neg_inf(t_f32 x);
 # define BINARY "01"
 # define OCTAL "0123456789"
 # define DECIMAL "0123456789"
-# define HEXADECIMAL "0123456789abcdef"
-# define HEXADECIMAL_UPPER "0123456789ABCDEF"
+# define HEX "0123456789abcdef"
+# define HEX_UPPER "0123456789ABCDEF"
 
 char		ft_to_lower(char c);
 char		ft_to_upper(char c);

@@ -10,57 +10,29 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_print.h"
 
-void	ft_read_va(t_fmt_arg *arg, va_list args)
+static t_s64	ft_get_len(t_fmt_arg arg, va_list va)
 {
-	if (!arg->specifier)
-		return ;
-	if (arg->specifier == 'u' || arg->specifier == 'x'
-		|| arg->specifier == 'X')
-		arg->u = va_arg (args, t_uint);
-	else if (arg->specifier == 's' || arg->specifier == 'p')
-		arg->p = va_arg (args, void *);
-	else
-		arg->i = va_arg (args, t_int);
-}
-
-static t_int	ft_sprintf_hash(t_buff *buff, t_fmt_arg arg)
-{
-	if (arg.specifier == 'p')
-		return (ft_putstr_buff (buff, "0x", FALSE));
-	if (arg.specifier == 'x' && (arg.flags & FLAG_HASH) && arg.u != 0)
-		return (ft_putstr_buff (buff, "0x", FALSE));
-	if (arg.specifier == 'X' && (arg.flags & FLAG_HASH) && arg.u != 0)
-		return (ft_putstr_buff (buff, "0X", FALSE));
-	return (0);
-}
-
-t_int	ft_next_arg(const char *fmt, t_buff *buff, va_list args)
-{
-	t_fmt_arg	fmt_arg;
-	t_int		i;
-
-	i = 0;
-	i += ft_read_arg (fmt, &fmt_arg, args);
-	if (fmt_arg.func)
-		ft_sprintf_with_flags (buff, fmt_arg);
-	return (i);
-}
-
-t_int	ft_sprintf_with_flags(t_buff *buff, t_fmt_arg arg)
-{
-	t_int	i;
-	t_int	len;
+	va_list	va2;
 	t_buff	null_buff;
+	t_s64	len;
 
 	null_buff.data = NULL;
 	null_buff.count = 0;
-	len = (*arg.func)(&null_buff, arg);
-	len += ft_sprintf_hash (&null_buff, arg);
+	va_copy (va2, va);
+	len = (*arg.func)(&null_buff, arg, va2);
+	va_end (va2);
+	return (len);
+}
+
+static t_s64	ft_sprint_arg(t_buff *buff, t_fmt_arg arg, va_list va)
+{
+	t_s64	i;
+	t_s64	len;
+
+	len = ft_get_len (arg, va);
 	i = 0;
-	if ((arg.flags & FLAG_ZPAD))
-		i += ft_sprintf_hash (buff, arg);
 	if (!(arg.flags & FLAG_LJUSTIFY))
 	{
 		if ((arg.flags & FLAG_ZPAD) && arg.precision < 0)
@@ -68,10 +40,19 @@ t_int	ft_sprintf_with_flags(t_buff *buff, t_fmt_arg arg)
 		else
 			i += ft_putchars_buff (buff, ' ', arg.width - len, FALSE);
 	}
-	if (!(arg.flags & FLAG_ZPAD))
-		i += ft_sprintf_hash (buff, arg);
-	i += (*arg.func)(buff, arg);
+	i += (*arg.func)(buff, arg, va);
 	if ((arg.flags & FLAG_LJUSTIFY))
 		i += ft_putchars_buff (buff, ' ', arg.width - len, FALSE);
+	return (i);
+}
+
+t_s64	ft_next_arg(t_cstr fmt, t_buff *buff, va_list va)
+{
+	t_fmt_arg	fmt_arg;
+	t_s64		i;
+
+	i = ft_read_arg (fmt, &fmt_arg, va);
+	if (fmt_arg.func)
+		ft_sprint_arg (buff, fmt_arg, va);
 	return (i);
 }

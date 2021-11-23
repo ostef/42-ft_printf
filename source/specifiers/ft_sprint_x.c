@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_sprintf_x.c                                     :+:      :+:    :+:   */
+/*   ft_sprint_x.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: soumanso <soumanso@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,14 +10,32 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_print.h"
 
-t_int	ft_sprintf_x(t_buff *buff, t_fmt_arg arg)
+t_s64	ft_sprint_x(t_buff *buff, t_fmt_arg arg, va_list va)
 {
-	const char	*base;
+	t_cstr	base;
+	t_int	min_width;
+	t_s64	i;
+	t_uint	un;
 
+	i = 0;
+	un = va_arg (va, t_uint);
+	if (arg.flags & FLAG_HASH && un != 0)
+	{
+		if (arg.specifier == 'X')
+			i += ft_putstr_buff (buff, "0X", FALSE);
+		else
+			i += ft_putstr_buff (buff, "0x", FALSE);
+	}
+	min_width = -1;
+	if (arg.precision >= 0)
+		min_width = arg.precision;
+	else if (!(arg.flags & FLAG_LJUSTIFY) && (arg.flags & FLAG_ZPAD))
+		min_width = arg.width - i;
 	base = HEX;
 	if (arg.specifier == 'X')
 		base = HEX_UPPER;
-	return (ft_putuint_buff (buff, arg.u, arg.precision, base));
+	i += ft_putuint_buff (buff, un, min_width, base);
+	return (i);
 }

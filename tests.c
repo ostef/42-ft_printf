@@ -10,26 +10,30 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_print.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <limits.h>
 
-static t_bool	test_print(int testno, const char *fmt, ...)
+t_bool	test_print(int testno, const char *fmt, ...)
 {
-	va_list	args;
+	va_list va;
+	va_list ftva;
 	t_bool	ok;
+	char	ftbuff[1024];
+	char	buff[1024];
 
-	char *ftbuff = (char *)malloc (1024);
-	char *buff = (char *)malloc (1024);
-	va_start (args, fmt);
-	t_int ftlen = ft_vsprintf (ftbuff, fmt, args);
-	t_int len = vsprintf (buff, fmt, args);
-	va_end (args);
+	va_start (va, fmt);
+	va_copy (ftva, va);
+	t_s64 ftlen = ft_vsprint (ftbuff, fmt, ftva);
+	va_end (ftva);
+	t_s64 len = vsprintf (buff, fmt, va);
+	va_end (va);
+	
 	ok = TRUE;
 	if (ftlen != len)
 	{
-		printf ("[%d]: Expected a length of %d, got %d.\n", testno, len, ftlen);
+		printf ("[%d]: Expected a length of %ld, got %ld.\n", testno, len, ftlen);
 		ok = FALSE;
 	}
 	if (!ft_strequ (ftbuff, buff))
@@ -41,8 +45,6 @@ static t_bool	test_print(int testno, const char *fmt, ...)
 		printf ("[%d]: OK: '%s'.\n", testno, ftbuff);
 	else
 		printf ("[%d]: KO.\n", testno);
-	free (ftbuff);
-	free (buff);
 	return (ok);
 }
 
@@ -303,31 +305,34 @@ int	main(void)
 	int	ko;
 
 	ko = 0;
-	printf ("Testing %%c.\n");
+	ft_println ("Testing %%c.");
 	ko += test_c ();
-	printf ("==========================\n");
-	printf ("Testing %%d.\n");
+	ft_println ("==========================");
+	ft_println ("Testing %%d.");
 	ko += test_d ();
-	printf ("==========================\n");
-	printf ("Testing %%u.\n");
+	ft_println ("==========================");
+	ft_println ("Testing %%u.");
 	ko += test_u ();
-	printf ("==========================\n");
-	printf ("Testing %%x.\n");
+	ft_println ("==========================");
+	ft_println ("Testing %%x.");
 	ko += test_x ();
-	printf ("==========================\n");
-	printf ("Testing %%X.\n");
+	ft_println ("==========================");
+	ft_println ("Testing %%X.");
 	ko += test_xcap ();
-	printf ("==========================\n");
-	printf ("Testing %%p.\n");
+	ft_println ("==========================");
+	ft_println ("Testing %%p.");
 	ko += test_p ();
-	printf ("==========================\n");
-	printf ("Testing %%s.\n");
+	ft_println ("==========================");
+	ft_println ("Testing %%s.");
 	ko += test_s ();
-	printf ("==========================\n");
-	printf ("=== Custom formatting options ===\n");
-	ft_printf ("%es", "Hello\tSailor!\n");
-	printf ("\n");
-	ft_printf ("%ec", '\0');
-	printf ("\n");
-	printf ("%d KO(s) total.\n", ko);
+	ft_println ("==========================");
+	ft_println ("%i KO(s) total.", ko);
+	ft_println ("=== Custom formatting options ===");
+	ft_println ("%\\s", "Hello\tSailor!");
+	ft_println ("%\\c", '\0');
+	ft_println ("%b", 0x12345);
+	ft_println ("%#b", 0x12345);
+	t_int	n;
+	ft_println ("Hello Sailor%n!", &n);
+	ft_println ("Should be 12: %i.", n);
 }

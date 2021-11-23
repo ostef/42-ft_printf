@@ -1,35 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_sprintf_i.c                                     :+:      :+:    :+:   */
+/*   ft_sprint_u.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: soumanso <soumanso@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/03 22:39:14 by soumanso          #+#    #+#             */
-/*   Updated: 2021/11/18 12:15:54 by soumanso         ###   ########lyon.fr   */
+/*   Created: 2021/11/03 22:40:10 by soumanso          #+#    #+#             */
+/*   Updated: 2021/11/10 17:45:18 by soumanso         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
-#include <stdio.h>
+#include "ft_print.h"
 
-t_int	ft_sprintf_i(t_buff *buff, t_fmt_arg arg)
+t_s64	ft_sprint_u(t_buff *buff, t_fmt_arg arg, va_list va)
 {
-	t_int	i;
 	t_int	min_width;
+	t_uint	un;
 
-	i = 0;
-	if (arg.i < 0)
-		i += ft_putchar_buff (buff, '-', FALSE);
-	else if ((arg.flags & FLAG_SIGN))
-		i += ft_putchar_buff (buff, '+', FALSE);
-	else if ((arg.flags & FLAG_SPACE))
-		i += ft_putchar_buff (buff, ' ', FALSE);
+	un = va_arg (va, t_uint);
 	min_width = -1;
 	if (arg.precision >= 0)
 		min_width = arg.precision;
 	else if (!(arg.flags & FLAG_LJUSTIFY) && (arg.flags & FLAG_ZPAD))
-		min_width = arg.width - i;
-	i += ft_putuint_buff (buff, (t_uint)ft_abs (arg.i), min_width, DECIMAL);
-	return (i);
+		min_width = arg.width;
+	return (ft_putuint_buff (buff, un, min_width, DECIMAL));
 }
