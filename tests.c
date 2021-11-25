@@ -305,6 +305,8 @@ int	main(void)
 	int	ko;
 
 	ko = 0;
+	ft_println ("Invalid specifier.");
+	ft_println ("%y");
 	ft_println ("Testing %%c.");
 	ko += test_c ();
 	ft_println ("==========================");

@@ -15,7 +15,7 @@
 t_s64	ft_sprint_c(t_buff *buff, t_fmt_arg arg, va_list va)
 {
 	char	c;
-	
+
 	c = (char)va_arg (va, t_int);
 	return (ft_putchar_buff (buff, c, arg.flags & FLAG_ESCAPED));
 }
